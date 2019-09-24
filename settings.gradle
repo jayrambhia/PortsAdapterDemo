@@ -1,1 +1,1 @@
-include ':app', ':hexagon', ':driven', ':driver', ':commons', ':commons-android'
+include ':app', ':hexagon', ':driven', ':driver', ':commons', ':commons-android', ':network'

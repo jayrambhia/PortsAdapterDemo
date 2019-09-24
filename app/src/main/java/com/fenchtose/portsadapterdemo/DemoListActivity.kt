@@ -1,88 +1,95 @@
 package com.fenchtose.portsadapterdemo
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.fenchtose.portsadapterdemo.commons.counters.FIBONACCI_COUNTER
-import com.fenchtose.portsadapterdemo.commons.counters.SIMPLE_COUNTER
+import com.fenchtose.portsadapterdemo.counters.CounterListActivity
 
-class MainActivity : AppCompatActivity() {
-
+class DemoListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_demo_list)
 
         recyclerView = findViewById(R.id.recyclerview)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = CountersListAdapter(this) { counter ->
-            CountersActivity.openCounters(this, counter)
+        val adapter = DemoListAdapter(this) { item ->
+            val clazz = when (item.id) {
+                "counters" -> CounterListActivity::class.java
+                else -> null
+            }
+
+            clazz?.let { openDemoActivity(it, item.name) }
         }
 
         recyclerView.adapter = adapter
     }
+
+    private fun openDemoActivity(clazz: Class<*>, name: String) {
+        startActivity(Intent(this, clazz).apply { putExtra("name", name) })
+    }
 }
 
-class CountersListAdapter(context: Context, private val openCounter: (CounterListItem) -> Unit) :
+class DemoListAdapter(context: Context, private val openDemo: (DemoListItem) -> Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val inflater = LayoutInflater.from(context)
 
-    private val counters = listOf(
-        CounterListItem(
-            id = SIMPLE_COUNTER,
-            name = "Simple counter"
+    private val demos = listOf(
+        DemoListItem(
+            id = "counters",
+            name = "Counters demo"
         ),
-        CounterListItem(
-            id = FIBONACCI_COUNTER,
-            name = "Fibonacci counter"
+        DemoListItem(
+            id = "images",
+            name = "Images demo"
         )
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return CounterItemViewHolder(
+        return DemoItemViewHolder(
             inflater.inflate(
                 R.layout.counter_list_item_layout,
                 parent,
                 false
             ),
-            openCounter
+            openDemo
         )
     }
 
-    override fun getItemCount() = counters.size
+    override fun getItemCount() = demos.size
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        with(holder as CounterItemViewHolder) {
-            bind(counters[position])
+        with(holder as DemoItemViewHolder) {
+            bind(demos[position])
         }
     }
 }
 
-class CounterItemViewHolder(
+class DemoItemViewHolder(
     private val container: View,
-    private val openCounter: (CounterListItem) -> Unit
+    private val openDemo: (DemoListItem) -> Unit
 ) : RecyclerView.ViewHolder(container) {
     private val name = container.findViewById<TextView>(R.id.counter_name)
 
-    fun bind(item: CounterListItem) {
+    fun bind(item: DemoListItem) {
         name.text = item.name
         container.setOnClickListener {
-            openCounter(item)
+            openDemo(item)
         }
     }
 }
 
-data class CounterListItem(
+data class DemoListItem(
     val id: String,
     val name: String
 )
-

@@ -1,4 +1,4 @@
-package com.fenchtose.portsadapterdemo
+package com.fenchtose.portsadapterdemo.counters
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import com.fenchtose.portsadapterdemo.R
 import com.fenchtose.portsadapterdemo.commons_android.utils.visible
 import com.fenchtose.portsadapterdemo.driven.counters.CountersMap
 import com.fenchtose.portsadapterdemo.driven.counters.NoOpCounter
@@ -24,6 +25,7 @@ class CountersActivity : AppCompatActivity() {
         fun openCounters(context: Context, counter: CounterListItem) {
             val intent = Intent(context, CountersActivity::class.java).apply {
                 putExtra("counter_id", counter.id)
+                putExtra("counter_name", counter.name)
             }
 
             context.startActivity(intent)
@@ -37,10 +39,14 @@ class CountersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_counters)
 
+        title = intent?.getStringExtra("counter_name") ?: "Unknown counter"
+
         val counter: CounterPort =
             CountersMap.map[intent?.getStringExtra("counter_id")]?.let { it() } ?: NoOpCounter()
 
-        viewModel = ViewModelProviders.of(this, CountersViewModelFactory(CountersModule(counter)))
+        viewModel = ViewModelProviders.of(this,
+            CountersViewModelFactory(CountersModule(counter))
+        )
             .get(CountersViewModel::class.java)
 
         counterView = findViewById(R.id.count)
