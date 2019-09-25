@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -22,6 +21,8 @@ import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchDriverPort
 import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchModule
 import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchState
 import com.fenchtose.portsadapterdemo.hexagon.images.SearchImage
+import com.fenchtose.portsadapterdemo.image_loader.ImageLoaderPort
+import com.fenchtose.portsadapterdemo.image_loader.glide.GlideImageLoader
 import com.fenchtose.portsadapterdemo.network.BasicOkhttpProvider
 import com.fenchtose.portsadapterdemo.network.OkhttpRequests
 import com.fenchtose.portsadapterdemo.parser.MoshiParser
@@ -33,6 +34,7 @@ class ImageSearchActivity : AppCompatActivity() {
     private lateinit var editText: EditText
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SimpleAdapter
+    private lateinit var imageLoader: ImageLoaderPort
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,8 +50,9 @@ class ImageSearchActivity : AppCompatActivity() {
         )
 
         recyclerView.adapter = adapter
-
         editText = findViewById(R.id.search)
+
+        imageLoader = GlideImageLoader()
 
         viewModel = ViewModelProviders.of(
             this,
@@ -86,7 +89,7 @@ class ImageSearchActivity : AppCompatActivity() {
     }
 
     private fun bindImage(view: View, image: SearchImage) {
-        view.findViewById<TextView>(R.id.link).text = image.url
+        imageLoader.loadSearchedImage(view.findViewById(R.id.image), image.url)
     }
 }
 
