@@ -25,6 +25,10 @@ fun <T> NetworkResult<T>.optSuccess(): T? {
     return if (isSuccess) value else null
 }
 
+fun <T> NetworkResult<T>.optFailure(): NetworkError? {
+    return if (isFailure) exception else null
+}
+
 sealed class NetworkError(message: String, cause: Throwable? = null) : Throwable(message, cause) {
     class GenericError(error: Exception) : NetworkError("generic error", error)
     class JsonError(error: Exception) : NetworkError("json error", error)

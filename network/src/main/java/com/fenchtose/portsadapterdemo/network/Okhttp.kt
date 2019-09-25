@@ -1,18 +1,31 @@
 package com.fenchtose.portsadapterdemo.network
 
+import com.fenchtose.portsadapterdemo.parser.ResultParser
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
 import java.lang.RuntimeException
 import java.lang.StringBuilder
 
+interface OkhttpProvider {
+    fun newClient(): OkHttpClient
+}
+
+class BasicOkhttpProvider : OkhttpProvider {
+    override fun newClient(): OkHttpClient {
+        return OkHttpClient()
+    }
+}
+
 class OkhttpRequests(
-    private val client: OkHttpClient,
+    clientProvider: OkhttpProvider,
     private val parser: ResultParser,
     private val baseUrl: String
 ) : NetworkPort {
 
-    override fun <T> get(path: String, params: Map<String, String>): NetworkResult<T> {
+    private val client = clientProvider.newClient()
+
+    override fun <T> get(responseClass: Class<T>, path: String, params: Map<String, String>): NetworkResult<T> {
 
         val urlBuilder = StringBuilder(baseUrl).append(path)
         var joiner = "?"
@@ -26,16 +39,16 @@ class OkhttpRequests(
             .get()
             .build()
 
-        return executeRequest(request)
+        return executeRequest(responseClass, request)
     }
 
-    private fun <T> executeRequest(request: Request): NetworkResult<T> {
+    private fun <T> executeRequest(responseClass: Class<T>, request: Request): NetworkResult<T> {
         try {
             val response = client.newCall(request).execute()
             val body = response.body()?.string()
             if (response.isSuccessful && body != null) {
                 try {
-                    val parsed = parser.parse<T>(body)
+                    val parsed = parser.parse(responseClass, body)
                     if (parsed != null) {
                         return NetworkResult.success(parsed)
                     }
@@ -48,6 +61,9 @@ class OkhttpRequests(
 
         } catch (e: IOException) {
             return NetworkResult.failure(NetworkError.GenericError(e))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw RuntimeException(e)
         }
     }
 }

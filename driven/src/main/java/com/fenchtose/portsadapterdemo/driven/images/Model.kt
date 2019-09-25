@@ -5,6 +5,12 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
+data class FlickrResponse(
+    @Json(name = "photos")
+    val feed: FlickrFeed
+)
+
+@JsonClass(generateAdapter = true)
 data class FlickrFeed(
     @Json(name = "photo")
     val images: List<FlickrImage>
@@ -22,7 +28,7 @@ data class FlickrImage(
     val secret: String
 )
 
-fun FlickrImage.url() = "http://farm$farm.static.flickr.com/$server/{$id}_$secret.jpg"
+fun FlickrImage.url() = "http://farm$farm.static.flickr.com/$server/${id}_$secret.jpg"
 
 fun FlickrImage.toModel(): SearchImage = SearchImage(
     id = id,

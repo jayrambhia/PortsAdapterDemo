@@ -6,7 +6,7 @@ data class SearchImage(
     val source: String
 )
 
-data class SearchImagesState(
+data class ImageSearchState(
     val images: List<SearchImage> = emptyList(),
     val query: String = "",
     val loading: Boolean = false,

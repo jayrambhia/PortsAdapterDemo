@@ -1,18 +1,20 @@
 package com.fenchtose.portsadapterdemo.driven.images
 
 import com.fenchtose.portsadapterdemo.hexagon.images.SearchImage
-import com.fenchtose.portsadapterdemo.hexagon.images.SearchImagesDrivenPort
+import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchDrivenPort
 import com.fenchtose.portsadapterdemo.network.NetworkPort
+import com.fenchtose.portsadapterdemo.network.optFailure
 import com.fenchtose.portsadapterdemo.network.optSuccess
 
-class FlickrSearch(private val port: NetworkPort, private val apiKey: String) : SearchImagesDrivenPort {
+class FlickrSearch(private val port: NetworkPort, private val apiKey: String) : ImageSearchDrivenPort {
     override fun search(query: String): List<SearchImage>? {
-        val result = port.get<FlickrFeed>(
+        val result = port.get(
+            FlickrResponse::class.java,
             "rest",
             mapOf(
                 "method" to "flickr.photos.search",
                 "format" to "json",
-                "jsonCallback" to "1",
+                "nojsoncallback" to "1",
                 "text" to query,
                 "api_key" to apiKey,
                 "page" to "1",
@@ -20,6 +22,8 @@ class FlickrSearch(private val port: NetworkPort, private val apiKey: String) : 
             )
         )
 
-        return result.optSuccess()?.images?.toModel()
+        result.optFailure()?.printStackTrace()
+
+        return result.optSuccess()?.feed?.images?.toModel()
     }
 }

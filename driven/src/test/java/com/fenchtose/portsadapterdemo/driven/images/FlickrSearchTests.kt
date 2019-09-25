@@ -11,7 +11,7 @@ import java.lang.RuntimeException
 class FlickrSearchTests {
 
     private val port = mock<NetworkPort> {
-        on { get<FlickrFeed>(eq("rest"), any()) } doAnswer {
+        on { get(eq(FlickrFeed::class.java), eq("rest"), any()) } doAnswer {
             val params = it.getArgument<Map<String, String>>(1)
             if (params["text"] == "batman") {
                 NetworkResult.success(
@@ -38,24 +38,25 @@ class FlickrSearchTests {
     fun `successful response`() {
         val result = flickrSearch.search("batman")
 
-        verify(port).get<FlickrFeed>(
+        verify(port).get(
+            FlickrFeed::class.java,
             "rest",
             mapOf(
                 "method" to "flickr.photos.search",
                 "format" to "json",
-                "jsonCallback" to "1",
+                "nojsoncallback" to "1",
                 "text" to "batman",
                 "api_key" to "secret",
                 "page" to "1",
                 "per_page" to "20"
             )
         )
-        assertEquals("response is success", 1, result.size)
+        assertEquals("response is success", 1, result?.size)
     }
 
     @Test
     fun `error response`() {
         val result = flickrSearch.search("")
-        assertEquals("response is error", 0, result.size)
+        assertEquals("response is error", null, result)
     }
 }

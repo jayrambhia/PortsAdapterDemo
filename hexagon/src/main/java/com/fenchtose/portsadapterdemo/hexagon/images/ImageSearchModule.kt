@@ -1,43 +1,49 @@
 package com.fenchtose.portsadapterdemo.hexagon.images
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlin.coroutines.suspendCoroutine
+import com.fenchtose.portsadapterdemo.hexagon.utils.CoroutinesContextProvider
+import kotlinx.coroutines.*
 
-typealias SearchResult = (SearchImagesState) -> Unit
+typealias SearchResult = (ImageSearchState) -> Unit
 
-interface SearchImagesDriverPort {
+interface ImageSearchDriverPort {
     fun addCallback(callback: SearchResult)
     fun removeCallback(callback: SearchResult)
     fun search(query: String)
     fun initialize()
 }
 
-interface SearchImagesDrivenPort {
+interface ImageSearchDrivenPort {
     fun search(query: String): List<SearchImage>?
 }
 
-class SearchImagesModule(private val port: SearchImagesDrivenPort) : SearchImagesDriverPort {
+class ImageSearchModule(
+    private val port: ImageSearchDrivenPort,
+    private val contextProvider: CoroutinesContextProvider
+) : ImageSearchDriverPort {
 
     private var callbacks: List<SearchResult> = listOf()
 
     override fun initialize() {
-        publish(SearchImagesState())
+        publish(ImageSearchState())
     }
 
     override fun search(query: String) {
         publish(
-            SearchImagesState(
+            ImageSearchState(
                 images = emptyList(),
                 query = query,
                 loading = true,
                 error = false
             )
         )
-        GlobalScope.launch {
-            val images = suspendCoroutine<List<SearchImage>?> { port.search(query) }
+
+        GlobalScope.launch(contextProvider.main()) {
+            val images = withContext(contextProvider.io()) {
+                port.search(query)
+            }
+
             publish(
-                SearchImagesState(
+                ImageSearchState(
                     images ?: emptyList(),
                     query = query,
                     loading = false,
@@ -47,7 +53,7 @@ class SearchImagesModule(private val port: SearchImagesDrivenPort) : SearchImage
         }
     }
 
-    private fun publish(result: SearchImagesState) {
+    private fun publish(result: ImageSearchState) {
         callbacks.forEach {
             it(result)
         }
