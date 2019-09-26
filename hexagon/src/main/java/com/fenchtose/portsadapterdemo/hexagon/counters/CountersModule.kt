@@ -13,7 +13,7 @@ data class CounterState(
     val canReduce: Boolean
 )
 
-class CountersModule(private val counterPort: CounterPort) : CounterDriverPort {
+class CountersModule(private val counterPort: CounterDrivenPort) : CounterDriverPort {
     override fun increment(): CounterState {
         return current(counterPort.increment())
     }
@@ -33,7 +33,7 @@ class CountersModule(private val counterPort: CounterPort) : CounterDriverPort {
     )
 }
 
-interface CounterPort {
+interface CounterDrivenPort {
     fun initialize(): Int
 
     fun increment(): Int

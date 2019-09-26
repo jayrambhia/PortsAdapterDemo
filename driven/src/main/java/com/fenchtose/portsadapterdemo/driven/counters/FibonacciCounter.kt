@@ -1,8 +1,8 @@
 package com.fenchtose.portsadapterdemo.driven.counters
 
-import com.fenchtose.portsadapterdemo.hexagon.counters.CounterPort
+import com.fenchtose.portsadapterdemo.hexagon.counters.CounterDrivenPort
 
-class FibonacciCounter : CounterPort {
+class FibonacciCounter : CounterDrivenPort {
 
     private val items: MutableList<Int> = mutableListOf(0, 1)
 

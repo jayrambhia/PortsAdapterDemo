@@ -1,8 +1,8 @@
 package com.fenchtose.portsadapterdemo.driven.counters
 
-import com.fenchtose.portsadapterdemo.hexagon.counters.CounterPort
+import com.fenchtose.portsadapterdemo.hexagon.counters.CounterDrivenPort
 
-class NoOpCounter : CounterPort {
+class NoOpCounter : CounterDrivenPort {
     override fun initialize(): Int {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
