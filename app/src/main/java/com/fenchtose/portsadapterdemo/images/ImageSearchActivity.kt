@@ -12,7 +12,10 @@ import com.fenchtose.portsadapterdemo.R
 import com.fenchtose.portsadapterdemo.commons_android.utils.show
 import com.fenchtose.portsadapterdemo.commons_android.widgets.SimpleAdapter
 import com.fenchtose.portsadapterdemo.commons_android.widgets.itemViewBinder
+import com.fenchtose.portsadapterdemo.driven.images.DaggerImageSearchDrivenComponent
+import com.fenchtose.portsadapterdemo.driven.images.ImageSearchDrivenComponent
 import com.fenchtose.portsadapterdemo.driven.images.ImageSearchDrivenModule
+import com.fenchtose.portsadapterdemo.driven.images.flickrSearch
 import com.fenchtose.portsadapterdemo.driver.images.ImageSearchViewModel
 import com.fenchtose.portsadapterdemo.driver.images.ImageSearchViewModelModule
 import com.fenchtose.portsadapterdemo.hexagon.images.*
@@ -48,13 +51,17 @@ class ImageSearchActivity : AppCompatActivity() {
 
         imageLoader = GlideImageLoader()
 
+        val drivenComponent = DaggerImageSearchDrivenComponent.builder()
+            .port(ImageSearchDrivenModule(BuildConfig.FLICKR_API_KEY))
+            .network(NetworkPortModule("https://api.flickr.com/services/"))
+            .parser(ResultParserModule())
+            .build()
+
         viewModel = DaggerImageSearchModule.builder()
             .driver(ImageSearchViewModelModule(this))
             .hexagon(ImageSearchHexagon())
+            .driven(drivenComponent)
             .coroutines(AppCoroutinesContextProviderModule())
-            .driven(ImageSearchDrivenModule(BuildConfig.FLICKR_API_KEY))
-            .network(NetworkPortModule("https://api.flickr.com/services/"))
-            .parser(ResultParserModule())
             .build()
             .viewModel()
 
