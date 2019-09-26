@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.EditText
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fenchtose.portsadapterdemo.BuildConfig
@@ -15,18 +12,15 @@ import com.fenchtose.portsadapterdemo.R
 import com.fenchtose.portsadapterdemo.commons_android.utils.show
 import com.fenchtose.portsadapterdemo.commons_android.widgets.SimpleAdapter
 import com.fenchtose.portsadapterdemo.commons_android.widgets.itemViewBinder
-import com.fenchtose.portsadapterdemo.driven.images.FlickrSearch
+import com.fenchtose.portsadapterdemo.driven.images.ImageSearchDrivenModule
 import com.fenchtose.portsadapterdemo.driver.images.ImageSearchViewModel
-import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchDriverPort
-import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchModule
-import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchState
-import com.fenchtose.portsadapterdemo.hexagon.images.SearchImage
+import com.fenchtose.portsadapterdemo.driver.images.ImageSearchViewModelModule
+import com.fenchtose.portsadapterdemo.hexagon.images.*
 import com.fenchtose.portsadapterdemo.image_loader.ImageLoaderPort
 import com.fenchtose.portsadapterdemo.image_loader.glide.GlideImageLoader
-import com.fenchtose.portsadapterdemo.network.BasicOkhttpProvider
-import com.fenchtose.portsadapterdemo.network.OkhttpRequests
-import com.fenchtose.portsadapterdemo.parser.MoshiParser
-import com.fenchtose.portsadapterdemo.utils.AppCoroutinesContextProvider
+import com.fenchtose.portsadapterdemo.network.NetworkPortModule
+import com.fenchtose.portsadapterdemo.parser.ResultParserModule
+import com.fenchtose.portsadapterdemo.utils.AppCoroutinesContextProviderModule
 
 class ImageSearchActivity : AppCompatActivity() {
 
@@ -54,22 +48,15 @@ class ImageSearchActivity : AppCompatActivity() {
 
         imageLoader = GlideImageLoader()
 
-        viewModel = ViewModelProviders.of(
-            this,
-            ImageSearchViewModelFactory(
-                ImageSearchModule(
-                    FlickrSearch(
-                        OkhttpRequests(
-                            BasicOkhttpProvider(),
-                            MoshiParser(),
-                            "https://api.flickr.com/services/"
-                        ),
-                        BuildConfig.FLICKR_API_KEY
-                    ),
-                    AppCoroutinesContextProvider()
-                )
-            )
-        ).get(ImageSearchViewModel::class.java)
+        viewModel = DaggerImageSearchModule.builder()
+            .driver(ImageSearchViewModelModule(this))
+            .hexagon(ImageSearchHexagon())
+            .coroutines(AppCoroutinesContextProviderModule())
+            .driven(ImageSearchDrivenModule(BuildConfig.FLICKR_API_KEY))
+            .network(NetworkPortModule("https://api.flickr.com/services/"))
+            .parser(ResultParserModule())
+            .build()
+            .viewModel()
 
         viewModel.state().observe(this, Observer(::render))
 
@@ -90,12 +77,5 @@ class ImageSearchActivity : AppCompatActivity() {
 
     private fun bindImage(view: View, image: SearchImage) {
         imageLoader.loadSearchedImage(view.findViewById(R.id.image), image.url)
-    }
-}
-
-class ImageSearchViewModelFactory(private val port: ImageSearchDriverPort) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return ImageSearchViewModel(port) as T
     }
 }

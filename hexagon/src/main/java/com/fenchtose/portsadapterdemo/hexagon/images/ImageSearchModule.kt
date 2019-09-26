@@ -1,6 +1,8 @@
 package com.fenchtose.portsadapterdemo.hexagon.images
 
 import com.fenchtose.portsadapterdemo.hexagon.utils.CoroutinesContextProvider
+import dagger.Module
+import dagger.Provides
 import kotlinx.coroutines.*
 
 typealias SearchResult = (ImageSearchState) -> Unit
@@ -16,7 +18,18 @@ interface ImageSearchDrivenPort {
     fun search(query: String): List<SearchImage>?
 }
 
-class ImageSearchModule(
+@Module
+class ImageSearchHexagon {
+    @Provides
+    fun hexagon(
+        driven: ImageSearchDrivenPort,
+        contextProvider: CoroutinesContextProvider
+    ): ImageSearchDriverPort {
+        return ImageSearchModule(driven, contextProvider)
+    }
+}
+
+class ImageSearchModule internal constructor(
     private val port: ImageSearchDrivenPort,
     private val contextProvider: CoroutinesContextProvider
 ) : ImageSearchDriverPort {
