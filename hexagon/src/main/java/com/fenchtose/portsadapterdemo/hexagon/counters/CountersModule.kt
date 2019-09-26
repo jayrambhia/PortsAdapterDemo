@@ -1,5 +1,16 @@
 package com.fenchtose.portsadapterdemo.hexagon.counters
 
+import dagger.Module
+import dagger.Provides
+
+@Module
+class CounterHexagonModule {
+    @Provides
+    fun hexagon(drivenPort: CounterDrivenPort): CounterDriverPort {
+        return CountersModule(drivenPort)
+    }
+}
+
 interface CounterDriverPort {
     fun increment(): CounterState
     fun reduction(): CounterState

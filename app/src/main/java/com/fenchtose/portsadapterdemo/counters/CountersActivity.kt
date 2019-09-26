@@ -9,7 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.fenchtose.portsadapterdemo.R
 import com.fenchtose.portsadapterdemo.commons_android.utils.visible
+import com.fenchtose.portsadapterdemo.driven.counters.CounterDrivenModule
+import com.fenchtose.portsadapterdemo.driver.counters.CounterViewModelModule
 import com.fenchtose.portsadapterdemo.driver.counters.CountersViewModel
+import com.fenchtose.portsadapterdemo.hexagon.counters.CounterHexagonModule
 
 class CountersActivity : AppCompatActivity() {
 
@@ -35,9 +38,9 @@ class CountersActivity : AppCompatActivity() {
         val counterId = intent?.getStringExtra("counter_id") ?: ""
 
         viewModel = DaggerCounterComponent.builder()
-            .counterDrivenPortModule(CounterDrivenPortModule(counterId))
-            .counterDriverPortModule(CounterDriverPortModule())
-            .counterViewModelModule(CounterViewModelModule(this))
+            .driver(CounterViewModelModule(this))
+            .hexagon(CounterHexagonModule())
+            .driven(CounterDrivenModule(counterId))
             .build()
             .viewModel()
 
