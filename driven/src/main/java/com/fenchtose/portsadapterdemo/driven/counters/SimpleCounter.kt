@@ -1,8 +1,8 @@
 package com.fenchtose.portsadapterdemo.driven.counters
 
-import com.fenchtose.portsadapterdemo.hexagon.counters.CounterPort
+import com.fenchtose.portsadapterdemo.hexagon.counters.CounterDrivenPort
 
-class SimpleCounter : CounterPort {
+class SimpleCounter : CounterDrivenPort {
 
     private var current = 0
 

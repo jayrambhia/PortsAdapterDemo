@@ -1,5 +1,16 @@
 package com.fenchtose.portsadapterdemo.hexagon.counters
 
+import dagger.Module
+import dagger.Provides
+
+@Module
+class CounterHexagonModule {
+    @Provides
+    fun hexagon(drivenPort: CounterDrivenPort): CounterDriverPort {
+        return CountersModule(drivenPort)
+    }
+}
+
 interface CounterDriverPort {
     fun increment(): CounterState
     fun reduction(): CounterState
@@ -13,7 +24,7 @@ data class CounterState(
     val canReduce: Boolean
 )
 
-class CountersModule(private val counterPort: CounterPort) : CounterDriverPort {
+class CountersModule(private val counterPort: CounterDrivenPort) : CounterDriverPort {
     override fun increment(): CounterState {
         return current(counterPort.increment())
     }
@@ -33,7 +44,7 @@ class CountersModule(private val counterPort: CounterPort) : CounterDriverPort {
     )
 }
 
-interface CounterPort {
+interface CounterDrivenPort {
     fun initialize(): Int
 
     fun increment(): Int

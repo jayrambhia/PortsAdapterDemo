@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class CountersModuleTests {
-    private val port = mock<CounterPort> {
+    private val port = mock<CounterDrivenPort> {
         var current = 10
         on { initialize() } doAnswer {
             current = 10
