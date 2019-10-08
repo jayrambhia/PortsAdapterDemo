@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.fenchtose.portsadapterdemo.commons_android.widgets.SimpleAdapter
 import com.fenchtose.portsadapterdemo.commons_android.widgets.itemViewBinder
 import com.fenchtose.portsadapterdemo.counters.CounterListActivity
-import com.fenchtose.portsadapterdemo.images.ImageSearchActivity
+import com.fenchtose.portsadapterdemo.images.ImageSearchListActivity
 
 class DemoListActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
@@ -47,7 +47,7 @@ class DemoListActivity : AppCompatActivity() {
     private fun openDemo(item: DemoListItem) {
         val clazz = when (item.id) {
             "counters" -> CounterListActivity::class.java
-            "images" -> ImageSearchActivity::class.java
+            "images" -> ImageSearchListActivity::class.java
             else -> null
         }
 

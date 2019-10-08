@@ -3,7 +3,6 @@ package com.fenchtose.portsadapterdemo.driven.images
 import com.fenchtose.portsadapterdemo.hexagon.images.SearchImage
 import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchDrivenPort
 import com.fenchtose.portsadapterdemo.network.NetworkPort
-import com.fenchtose.portsadapterdemo.network.optFailure
 import com.fenchtose.portsadapterdemo.network.optSuccess
 
 class FlickrSearch(private val port: NetworkPort, private val apiKey: String) : ImageSearchDrivenPort {
@@ -22,8 +21,6 @@ class FlickrSearch(private val port: NetworkPort, private val apiKey: String) : 
             )
         )
 
-        result.optFailure()?.printStackTrace()
-
-        return result.optSuccess()?.feed?.images?.toModel()
+        return result.optSuccess()?.feed?.images?.flickrToModel()
     }
 }

@@ -1,5 +1,7 @@
 package com.fenchtose.portsadapterdemo.images
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,13 +11,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fenchtose.portsadapterdemo.BuildConfig
 import com.fenchtose.portsadapterdemo.R
+import com.fenchtose.portsadapterdemo.commons.counters.FLICKR_SEARCH
+import com.fenchtose.portsadapterdemo.commons.counters.GIPHY_SEARCH
 import com.fenchtose.portsadapterdemo.commons_android.utils.show
 import com.fenchtose.portsadapterdemo.commons_android.widgets.SimpleAdapter
 import com.fenchtose.portsadapterdemo.commons_android.widgets.itemViewBinder
 import com.fenchtose.portsadapterdemo.driven.images.DaggerImageSearchDrivenComponent
-import com.fenchtose.portsadapterdemo.driven.images.ImageSearchDrivenComponent
 import com.fenchtose.portsadapterdemo.driven.images.ImageSearchDrivenModule
-import com.fenchtose.portsadapterdemo.driven.images.flickrSearch
 import com.fenchtose.portsadapterdemo.driver.images.ImageSearchViewModel
 import com.fenchtose.portsadapterdemo.driver.images.ImageSearchViewModelModule
 import com.fenchtose.portsadapterdemo.hexagon.images.*
@@ -33,9 +35,23 @@ class ImageSearchActivity : AppCompatActivity() {
     private lateinit var adapter: SimpleAdapter
     private lateinit var imageLoader: ImageLoaderPort
 
+    companion object {
+        fun openSearch(context: Context, item: SearchListItem) {
+            val intent = Intent(context, ImageSearchActivity::class.java).apply {
+                putExtra("search_id", item.id)
+                putExtra("search_name", item.name)
+            }
+
+            context.startActivity(intent)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_images)
+
+        title = intent?.getStringExtra("search_name") ?: "Unknown search"
+        val searchId = intent?.getStringExtra("search_id") ?: ""
 
         recyclerView = findViewById(R.id.recyclerview)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
@@ -52,8 +68,8 @@ class ImageSearchActivity : AppCompatActivity() {
         imageLoader = GlideImageLoader()
 
         val drivenComponent = DaggerImageSearchDrivenComponent.builder()
-            .port(ImageSearchDrivenModule(BuildConfig.FLICKR_API_KEY))
-            .network(NetworkPortModule("https://api.flickr.com/services/"))
+            .port(ImageSearchDrivenModule(searchId, apiKey(searchId)))
+            .network(NetworkPortModule(baseUrl(searchId)))
             .parser(ResultParserModule())
             .build()
 
@@ -83,6 +99,22 @@ class ImageSearchActivity : AppCompatActivity() {
     }
 
     private fun bindImage(view: View, image: SearchImage) {
-        imageLoader.loadSearchedImage(view.findViewById(R.id.image), image.url)
+        imageLoader.loadSearchedImage(view.findViewById(R.id.image), image.url, image.isGif)
+    }
+
+    private fun apiKey(id: String): String {
+        return when (id) {
+            FLICKR_SEARCH -> BuildConfig.FLICKR_API_KEY
+            GIPHY_SEARCH -> BuildConfig.GIPHY_API_KEY
+            else -> ""
+        }
+    }
+
+    private fun baseUrl(id: String): String {
+        return when (id) {
+            FLICKR_SEARCH -> "https://api.flickr.com/services/"
+            GIPHY_SEARCH -> "https://api.giphy.com/v1/gifs/"
+            else -> ""
+        }
     }
 }

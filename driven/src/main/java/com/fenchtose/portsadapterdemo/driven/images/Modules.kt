@@ -1,5 +1,7 @@
 package com.fenchtose.portsadapterdemo.driven.images
 
+import com.fenchtose.portsadapterdemo.commons.counters.FLICKR_SEARCH
+import com.fenchtose.portsadapterdemo.commons.counters.GIPHY_SEARCH
 import com.fenchtose.portsadapterdemo.hexagon.images.ImageSearchDrivenPort
 import com.fenchtose.portsadapterdemo.network.NetworkPort
 import com.fenchtose.portsadapterdemo.network.NetworkPortModule
@@ -9,10 +11,18 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ImageSearchDrivenModule(private val apiKey: String) {
+class ImageSearchDrivenModule constructor(
+    private val search: String,
+    private val apiKey: String
+) {
+
     @Provides
     fun adapter(port: NetworkPort): ImageSearchDrivenPort {
-        return FlickrSearch(port, apiKey)
+        return when (search) {
+            FLICKR_SEARCH -> FlickrSearch(port, apiKey)
+            GIPHY_SEARCH -> GiphySearch(port, apiKey)
+            else -> StubSearch()
+        }
     }
 }
 

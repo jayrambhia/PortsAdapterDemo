@@ -14,7 +14,8 @@ class SearchImagesModuleTests {
             SearchImage(
                 id = "1",
                 url = "some_url",
-                source = "test"
+                source = "test",
+                isGif = false
             )
         )
 
@@ -38,7 +39,7 @@ class SearchImagesModuleTests {
         verifyCaptures(
             listener,
             ImageSearchState(emptyList(), "batman", true, false),
-            ImageSearchState(listOf(SearchImage("1", "some_url", "test")), "batman", false, false)
+            ImageSearchState(listOf(SearchImage("1", "some_url", "test", false)), "batman", false, false)
         )
     }
 

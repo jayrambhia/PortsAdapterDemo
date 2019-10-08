@@ -60,6 +60,7 @@ class OkhttpRequests(
             return NetworkResult.failure(NetworkError.GenericError(RuntimeException("something went wrong")))
 
         } catch (e: IOException) {
+            e.printStackTrace()
             return NetworkResult.failure(NetworkError.GenericError(e))
         } catch (e: Exception) {
             e.printStackTrace()

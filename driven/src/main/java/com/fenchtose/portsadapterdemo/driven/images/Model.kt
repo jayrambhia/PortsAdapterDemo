@@ -33,7 +33,47 @@ fun FlickrImage.url() = "http://farm$farm.static.flickr.com/$server/${id}_$secre
 fun FlickrImage.toModel(): SearchImage = SearchImage(
     id = id,
     url = url(),
-    source = "Flickr"
+    source = "Flickr",
+    isGif = false
 )
 
-fun List<FlickrImage>.toModel(): List<SearchImage> = map { it.toModel() }
+fun List<FlickrImage>.flickrToModel(): List<SearchImage> = map { it.toModel() }
+
+@JsonClass(generateAdapter = true)
+data class GiphyResponse(
+    @Json(name = "data")
+    val images: List<GiphyImage>
+)
+
+@JsonClass(generateAdapter = true)
+data class GiphyImage(
+    @Json(name = "id")
+    val id: String,
+    @Json(name = "slug")
+    val slug: String,
+    @Json(name = "url")
+    val url: String,
+    @Json(name = "images")
+    val bundle: GiphyImageBundle
+)
+
+@JsonClass(generateAdapter = true)
+data class GiphyImageBundle(
+    @Json(name = "fixed_width")
+    val fixedWidth: GiphyImageRaw
+)
+
+@JsonClass(generateAdapter = true)
+data class GiphyImageRaw(
+    @Json(name = "url")
+    val url: String
+)
+
+fun GiphyImage.toModel(): SearchImage = SearchImage(
+    id = id,
+    url = bundle.fixedWidth.url,
+    source = "Giphy",
+    isGif = true
+)
+
+fun List<GiphyImage>.giphyToModel(): List<SearchImage> = map { it.toModel() }

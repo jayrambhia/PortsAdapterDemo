@@ -3,7 +3,8 @@ package com.fenchtose.portsadapterdemo.hexagon.images
 data class SearchImage(
     val id: String,
     val url: String,
-    val source: String
+    val source: String,
+    val isGif: Boolean
 )
 
 data class ImageSearchState(

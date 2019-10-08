@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".counters.CounterListActivity" />
         <activity android:name=".counters.CountersActivity" />
+        <activity android:name=".images.ImageSearchListActivity" />
         <activity android:name=".images.ImageSearchActivity"/>
     </application>
 

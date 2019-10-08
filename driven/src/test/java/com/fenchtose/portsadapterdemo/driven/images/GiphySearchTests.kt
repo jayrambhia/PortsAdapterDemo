@@ -8,21 +8,22 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.lang.RuntimeException
 
-class FlickrSearchTests {
-
+class GiphySearchTests {
     private val port = mock<NetworkPort> {
-        on { get(eq(FlickrResponse::class.java), eq("rest"), any()) } doAnswer {
+        on { get(eq(GiphyResponse::class.java), eq("search"), any()) } doAnswer {
             val params = it.getArgument<Map<String, String>>(2)
-            if (params["text"] == "batman") {
+            if (params["q"] == "batman") {
                 NetworkResult.success(
-                    FlickrResponse(
-                        FlickrFeed(
-                            images = listOf(
-                                FlickrImage(
-                                    id = "1",
-                                    farm = "1",
-                                    secret = "1",
-                                    server = "1"
+                    GiphyResponse(
+                        images = listOf(
+                            GiphyImage(
+                                id = "1",
+                                slug = "giphy_giphy",
+                                url = "giphy_url",
+                                bundle = GiphyImageBundle(
+                                    fixedWidth = GiphyImageRaw(
+                                        url = "giphy_image_url"
+                                    )
                                 )
                             )
                         )
@@ -34,31 +35,28 @@ class FlickrSearchTests {
         }
     }
 
-    private val flickrSearch = FlickrSearch(port, "secret")
+    private val giphySearch = GiphySearch(port, "secret")
 
     @Test
     fun `successful response`() {
-        val result = flickrSearch.search("batman")
-
+        val result = giphySearch.search("batman")
         verify(port).get(
-            FlickrResponse::class.java,
-            "rest",
+            GiphyResponse::class.java,
+            "search",
             mapOf(
-                "method" to "flickr.photos.search",
-                "format" to "json",
-                "nojsoncallback" to "1",
-                "text" to "batman",
+                "q" to "batman",
                 "api_key" to "secret",
-                "page" to "1",
-                "per_page" to "20"
+                "limit" to "20",
+                "offset" to "0"
             )
         )
+
         assertEquals("response is success", 1, result?.size)
     }
 
     @Test
     fun `error response`() {
-        val result = flickrSearch.search("")
+        val result = giphySearch.search("")
         assertEquals("response is error", null, result)
     }
 }

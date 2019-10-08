@@ -16,6 +16,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField 'String', 'FLICKR_API_KEY', properties['FLICKR_API_KEY']
+        buildConfigField 'String', 'GIPHY_API_KEY', properties['GIPHY_API_KEY']
     }
     buildTypes {
         release {
