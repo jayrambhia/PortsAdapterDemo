@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    tools:background="@color/backgroundColor"
     android:background="?attr/selectableItemBackground">
 
     <TextView
         android:id="@+id/name"
         android:padding="16dp"
+        android:textAppearance="@style/Text.Primary.Medium.Big"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:text="Demo"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/colorPrimary" />
+        android:background="@color/secondaryTextColor" />
 
 </LinearLayout>

@@ -9,11 +9,12 @@
         android:id="@+id/name"
         android:padding="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/Text.Primary.Medium.Big"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/colorPrimary" />
+        android:background="@color/secondaryTextColor" />
 
 </LinearLayout>
