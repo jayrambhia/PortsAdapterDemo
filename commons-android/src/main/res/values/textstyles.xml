@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Text">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text.Primary">
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
+    <style name="Text.Primary.Medium">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Text.Primary.Medium.Largest">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Text.Primary.Medium.Larger">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="Text.Primary.Medium.Large">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Primary.Medium.Big">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Primary.Medium.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Primary.Largest">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Text.Primary.Larger">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="Text.Primary.Large">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Primary.Big">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Primary.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Secondary">
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="Text.Secondary.Medium">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Text.Secondary.Medium.Largest">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Text.Secondary.Medium.Larger">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="Text.Secondary.Medium.Large">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Secondary.Medium.Big">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Secondary.Medium.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Secondary.Largest">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Text.Secondary.Larger">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="Text.Secondary.Large">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Secondary.Big">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Secondary.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Accent">
+        <item name="android:textColor">?attr/colorAccent</item>
+    </style>
+
+    <style name="Text.Accent.Medium">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="Text.Accent.Medium.Largest">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Text.Accent.Medium.Larger">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="Text.Accent.Medium.Large">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Accent.Medium.Big">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Accent.Medium.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Text.Accent.Largest">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Text.Accent.Larger">
+        <item name="android:textSize">21sp</item>
+    </style>
+
+    <style name="Text.Accent.Large">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Text.Accent.Big">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Text.Accent.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+</resources>

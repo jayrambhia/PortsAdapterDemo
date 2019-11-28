@@ -11,9 +11,9 @@ class AppCoroutinesContextProvider : CoroutinesContextProvider {
     override fun io() = Dispatchers.IO
 }
 
-// TODO Singleton scope
 @Module
 class AppCoroutinesContextProviderModule {
+    @Singleton
     @Provides
     fun contextProvider(): CoroutinesContextProvider = AppCoroutinesContextProvider()
 }

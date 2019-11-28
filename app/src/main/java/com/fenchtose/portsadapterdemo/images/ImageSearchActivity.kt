@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.fenchtose.portsadapterdemo.BuildConfig
+import com.fenchtose.portsadapterdemo.PortsAdaptersApp
 import com.fenchtose.portsadapterdemo.R
 import com.fenchtose.portsadapterdemo.commons.counters.FLICKR_SEARCH
 import com.fenchtose.portsadapterdemo.commons.counters.GIPHY_SEARCH
@@ -26,10 +27,12 @@ import com.fenchtose.portsadapterdemo.image_loader.glide.GlideImageLoader
 import com.fenchtose.portsadapterdemo.network.NetworkPortModule
 import com.fenchtose.portsadapterdemo.parser.ResultParserModule
 import com.fenchtose.portsadapterdemo.utils.AppCoroutinesContextProviderModule
+import javax.inject.Inject
 
 class ImageSearchActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: ImageSearchViewModel
+    @Inject
+    lateinit var viewModel: ImageSearchViewModel
     private lateinit var editText: EditText
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: SimpleAdapter
@@ -73,13 +76,13 @@ class ImageSearchActivity : AppCompatActivity() {
             .parser(ResultParserModule())
             .build()
 
-        viewModel = DaggerImageSearchModule.builder()
+        DaggerImageSearchComponent.builder()
             .driver(ImageSearchViewModelModule(this))
             .hexagon(ImageSearchHexagon())
             .driven(drivenComponent)
-            .coroutines(AppCoroutinesContextProviderModule())
+            .app((application as PortsAdaptersApp).appComponent)
             .build()
-            .viewModel()
+            .inject(this)
 
         viewModel.state().observe(this, Observer(::render))
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroundColor"
     tools:context=".images.ImageSearchActivity">
 
     <EditText
@@ -14,11 +15,15 @@
         android:hint="Search"
         android:maxLines="1"
         android:padding="16dp"
+        android:textColorHint="@color/secondaryTextColor"
+        android:textColor="@color/primaryTextColor"
+        android:textAppearance="@style/Text.Primary.Medium.Large"
         app:layout_constraintEnd_toStartOf="@id/search_cta"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
+        style="@style/PrimaryButton.Small"
         android:id="@+id/search_cta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -47,6 +52,7 @@
         tools:visibility="visible"
         android:gravity="center"
         android:padding="16dp"
+        android:textAppearance="@style/Text.Secondary.Large"
         android:text="Unable to search for images"
         app:layout_constraintTop_toBottomOf="@id/search"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -61,6 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search" />
+        app:layout_constraintTop_toBottomOf="@id/search"
+        tools:listitem="@layout/search_image_list_item_layout"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
